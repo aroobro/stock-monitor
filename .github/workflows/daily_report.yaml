@@ -4,7 +4,7 @@ on:
   schedule:
     # KST 아침 6:30 -> UTC 전날 21:30 (분 시 일 월 요일)
     - cron: '30 21 * * *'
-  workflow_dispatch: # GitHub 웹사이트에서 버튼 눌러 즉시 테스트할 수 있게 설정
+  workflow_dispatch:
 
 jobs:
   run-report:
@@ -12,10 +12,10 @@ jobs:
 
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
