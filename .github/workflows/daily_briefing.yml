@@ -1,0 +1,32 @@
+# 저장 위치: .github/workflows/daily_briefing.yml
+name: Daily AI Stock Briefing
+
+on:
+  schedule:
+    # cron은 UTC 기준. UTC 21:30 (일~목) = KST 06:30 (월~금)
+    # GitHub 서버 사정으로 몇 분~수십 분 늦게 시작될 수 있음
+    - cron: "30 21 * * 0-4"
+  workflow_dispatch: # Actions 탭에서 수동 실행(테스트)용
+
+jobs:
+  briefing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - run: python main.py
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # Claude로 바꾸려면: ANTHROPIC_API_KEY 시크릿 추가 + 저장소 Variables에 LLM_PROVIDER=claude
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          LLM_PROVIDER: ${{ vars.LLM_PROVIDER }}

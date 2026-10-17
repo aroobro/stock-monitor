@@ -1,2 +1,4 @@
 yfinance
 requests
+google-genai
+anthropic
